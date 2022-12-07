@@ -97,12 +97,6 @@ class Books extends ResourceController
     }
 
 
-
-
-
-
-
-
     public function update($id = null)
     {
         $rules = $this->validate([
@@ -181,16 +175,6 @@ class Books extends ResourceController
         ];
         return $this->respond($respons, 200);
     }
-
-
-
-
-
-
-
-
-
-
 
     public function delete($id = null)
     {

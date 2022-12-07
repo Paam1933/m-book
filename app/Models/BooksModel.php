@@ -10,6 +10,7 @@ class BooksModel extends Model
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $allowedFields = ['code', 'judul', 'pengarang', 'tahun_terbit', 'kota_terbit', 'sampul', 'isi_konten'];
+
     // protected $validationRule = [
     //     'code' => 'required',
     //     'judul' => 'required',
