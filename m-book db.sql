@@ -1,0 +1,1 @@
+SELECT * FROM tb_books WHERE id = 1;tb_bookstb_books

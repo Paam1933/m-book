@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\BooksModel;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 
@@ -68,15 +69,16 @@ class Books extends ResourceController
                 'message' => $this->validator->getErrors(),
             ];
 
-            return $this->failValidationErrors($respons);
+            return $this->failValidationErrors($respons, 404);
         }
         $file = $this->request->getFile('sampul');
-        if ($file->getError() == 4) {
+        if ($file == null) {
             $filename = 'default.png';
         } else {
             $filename = $file->getRandomName();
             $file->move('img', $filename);
         }
+
         $respond = [
             'status' => true,
             'messege' => 'Add Book successfuly'
@@ -92,14 +94,14 @@ class Books extends ResourceController
         ];
 
         $this->model->insert($data);
-
         return $this->respond($respond, 200);
     }
 
 
     public function update($id = null)
     {
-        $rules = $this->validate([
+        $model = new BooksModel();
+        $rules = $model->validate([
             'judul' => [
                 'required',
                 'errors' => [
@@ -147,28 +149,37 @@ class Books extends ResourceController
             return $this->failValidationErrors($respons);
         }
         // get file sampul
-        $file = $this->request->getFile('sampul');
-        // jika user tidak memilih/update sampul
-        if ($file->getError() == 4) {
-            $sampul = $this->request->getPost('old_sampul');
-        } else {
-            // jika user update sampul
-            // ubah nama file menjadi random
-            $sampul = $file->getRandomName();
-            // upload ke folder img
-            $file->move('img', $sampul);
-            // hapus file lama
-            unlink('img/' . $this->request->getPost('old_sampul'));
-        }
-        $this->model->update($id, [
+        // $file = $this->request->getFile('sampul');
+        // // jika user tidak memilih/update sampul
+        // if ($file->getError() == 4) {
+        //     $sampul = $this->request->getPost('old_sampul');
+        //     if ($sampul == null) {
+        //         $sampul = 'default.png';
+        //     }
+        // } else {
+        //     // jika user update sampul
+        //     // ubah nama file menjadi random
+        //     $sampul = $file->getRandomName();
+        //     // upload ke folder img
+        //     $file->move('img', $sampul);
+        //     // hapus file lama
+        //     if ($sampul != 'default.png') {
+        //         unlink('img/' . $this->request->getPost('old_sampul'));
+        //     }
+        // }
+
+        $data = [
             'judul'         => $this->request->getVar('judul'),
-            'code'          => $this->request->getVar('kode'),
+            'code'          => $this->request->getVar('code'),
             'pengarang'     => $this->request->getVar('pengarang'),
             'tahun_terbit'  => $this->request->getVar('tahun_terbit'),
             'kota_terbit'   => $this->request->getVar('kota_terbit'),
             'isi_konten'    => $this->request->getVar('isi_konten'),
-            'sampul' => $sampul,
-        ]);
+            // 'sampul' => $sampul,
+        ];
+        $data = $this->request->getRawInput();
+        $model->update($id, $data);
+
         $respons = [
             'status' => true,
             'message' => 'update data success'
@@ -179,7 +190,9 @@ class Books extends ResourceController
     public function delete($id = null)
     {
         $oldSampul = $this->model->find($id);
-        if ($oldSampul['sampul'] != '') {
+
+
+        if ($oldSampul['sampul'] != 'default.png') {
             unlink('img/' . $oldSampul['sampul']);
         }
         $this->model->delete($id);
