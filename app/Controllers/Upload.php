@@ -87,22 +87,24 @@ class Upload extends ResourceController
             ];
             return $this->respond($response, 404);
         } else {
-            $old_img = $model->find($id);
-            $img = $this->request->getFile('sampul');
-            $sampul_name = $img->getRandomName();
-            if (!$img->hasMoved()) {
-                $img->move('img', $sampul_name . '.' . $img->getExtension());
-            }
-            if ($img->getName() != 'default.png') {
-                unlink('img/' . $old_img['sampul']);
+            // get file sampul
+            $file = $this->request->getFile('sampul');
+            $sampul_lama = $model->find($id);
+            // jika user tidak memilih/update sampul
+            $sampul = $file->getRandomName();
+            // print_r($file->getName());
+            // die;
+            $file->move('img', $sampul);
+            if ($sampul_lama['sampul'] != 'default.png') {
+                unlink('img/' . $sampul_lama['sampul']);
             }
             $data = [
-                'sampul' => $sampul_name
+                'sampul' => $sampul
             ];
             $model->update($id, $data);
             $response = [
                 'status' => 201,
-                'error' => 201,
+                'error' => true,
                 'message' => 'upload sampul berhasil'
             ];
             return $this->respond($response, 201);

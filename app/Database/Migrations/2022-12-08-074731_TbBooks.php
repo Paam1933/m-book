@@ -16,27 +16,7 @@ class TbBooks extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true
             ],
-            'code'       => [
-                'type'           => 'VARCHAR',
-                'constraint'     => '255'
-            ],
             'judul'      => [
-                'type'           => 'VARCHAR',
-                'constraint'     => '255'
-            ],
-            'pengarang' => [
-                'type'           => 'VARCHAR',
-                'constraint'     => '255'
-            ],
-            'tahun_terbit'      => [
-                'type'           => 'VARCHAR',
-                'constraint'     => '255'
-            ],
-            'kota_terbit'      => [
-                'type'           => 'VARCHAR',
-                'constraint'     => '255'
-            ],
-            'sampul'      => [
                 'type'           => 'VARCHAR',
                 'constraint'     => '255'
             ],

@@ -35,7 +35,7 @@ class Database extends Config
         'hostname' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'db_book-api',
+        'database' => 'book_db',
         'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,
@@ -58,7 +58,7 @@ class Database extends Config
      */
     public $tests = [
         'DSN'         => '',
-        'hostname'    => '127.0.0.1',
+        'hostname'    => 'http://192.168.1.18/book-api/public/',
         'username'    => '',
         'password'    => '',
         'database'    => ':memory:',
